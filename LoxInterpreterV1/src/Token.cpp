@@ -57,5 +57,6 @@ Token::Token(Token::Type type, const std::string& lexeme, int line, double value
 //public
 std::string Token::toString() const
 {
-    return typeNames[(int)m_type] + " " + m_lexeme;
+    std::string v = (m_type == Token::Type::String) ? m_stringValue : std::to_string(m_numberValue);
+    return typeNames[(int)m_type] + ": " + m_lexeme + ", " + v;
 }

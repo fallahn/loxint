@@ -68,7 +68,7 @@ void Scanner::scan()
 
     auto addToken = [this](Token::Type type)
     {
-        m_tokens.emplace_back(type, m_source.substr(m_startPos, m_currentPos), m_currentLine);
+        m_tokens.emplace_back(type, m_source.substr(m_startPos, m_currentPos - m_startPos), m_currentLine);
     };
 
     auto match = [this](char c)->bool
@@ -108,8 +108,8 @@ void Scanner::scan()
         }
 
         advance();
-        std::string value = m_source.substr(m_startPos + 1, m_currentPos - 1);
-        m_tokens.emplace_back(Token::Type::String, m_source.substr(m_startPos, m_currentPos), m_currentLine, value);
+        std::string value = m_source.substr(m_startPos + 1, (m_currentPos - m_startPos) - 2);
+        m_tokens.emplace_back(Token::Type::String, m_source.substr(m_startPos, m_currentPos - m_startPos), m_currentLine, value);
     };
 
     auto isDigit = [](char c)->bool
@@ -136,7 +136,7 @@ void Scanner::scan()
         try
         {
             double value = std::stod(m_source.substr(m_startPos, m_currentPos).c_str());
-            m_tokens.emplace_back(Token::Type::Number, m_source.substr(m_startPos, m_currentPos), m_currentLine, value);
+            m_tokens.emplace_back(Token::Type::Number, m_source.substr(m_startPos, m_currentPos - m_startPos), m_currentLine, value);
         }
         catch (...)
         {
@@ -160,7 +160,7 @@ void Scanner::scan()
     {
         while (isAlphaNumeric(peek())) advance();
 
-        auto text = m_source.substr(m_startPos, m_currentPos);
+        auto text = m_source.substr(m_startPos, m_currentPos - m_startPos);
         if (reservedWords.count(text) > 0)
         {
             addToken(reservedWords.find(text)->second);

@@ -80,6 +80,6 @@ void Lox::run(const std::string& str)
 
 void Lox::log(int line, const std::string& position, const std::string& message)
 {
-    std::cout << "[line " << line << "] Error " << position << ": " << message;
+    std::cout << "[line " << line << "] Error " << position << ": " << message <<std::endl;
     //TODO make this output more useful information
 }
